@@ -1,0 +1,25 @@
+{
+    "name": "plusforta/postmark-bundle",
+    "description": "This bundle enables postmark template emails for symfony",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Jan Hentschel",
+            "email": "jan.hentschel@plusforta.de"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "PlusForta\\PostmarkBundle\\": "src/"
+        }
+    },
+    "require-dev": {
+        "wildbit/postmark-php": "^2.8",
+        "symfony/config": "^4.3",
+        "symfony/dependency-injection": "^4.3",
+        "vimeo/psalm": "^3.5",
+        "symfony/http-kernel": "^4.3",
+        "webmozart/assert": "^1.5"
+    }
+}
