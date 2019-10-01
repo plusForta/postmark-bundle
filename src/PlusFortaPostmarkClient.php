@@ -1,7 +1,7 @@
 <?php
 
 namespace PlusForta\PostmarkBundle;
-use PlusForta\PostmarkBundle\Exceptions\TemplateMailException;
+
 use PlusForta\PostmarkBundle\Mail\TemplateMailInterface;
 use PlusForta\PostmarkBundle\Value\Email;
 use PlusForta\PostmarkBundle\Value\EmailName;
@@ -83,7 +83,7 @@ class PlusFortaPostmarkClient
      */
     public function sendMail(TemplateMailInterface $email): void
     {
-        $this->logger->debug(sprintf("Called sendMail with email of type %s.", get_class($email)));
+        $this->logger->debug(sprintf('Called sendMail with email of type %s.', get_class($email)));
         $from = $email->getFrom();
         $to = $email->getTo();
         $templateId = $email->getTemplateIdOrAlias();
@@ -122,7 +122,7 @@ class PlusFortaPostmarkClient
 
 
 
-        $this->logger->debug(json_encode($templateModel));
+        $this->logger->debug(\json_encode($templateModel));
         if ($this->disableDelivery) {
             $this->logger->warning('Email Delivery is disabled!');
             return;
