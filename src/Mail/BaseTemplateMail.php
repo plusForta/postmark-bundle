@@ -19,6 +19,9 @@ abstract class BaseTemplateMail implements TemplateMailInterface
 
     protected const PARAM_NOT_FOUND_MESSAGE = 'Parameter "%s" ist not defined for email of type "%s".';
 
+    /**
+     * @var array<int, string>
+     */
     protected static $parameters;
 
     /**
@@ -36,6 +39,9 @@ abstract class BaseTemplateMail implements TemplateMailInterface
      */
     protected $to;
 
+    /**
+     * @return array<string, string>
+     */
     abstract function getTemplate(): array;
 
     /**

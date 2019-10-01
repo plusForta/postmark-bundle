@@ -20,9 +20,9 @@ class KFKundenanfrageTemplateMail extends BaseTemplateMail
 {
     protected const SERVER_ID = 'plusforta.de';
 
-    protected const TEMPLATE_ALIAS =   '12645253';
+    protected const TEMPLATE_ID =   12645253;
 
-    protected static $parameters= [
+    protected static $parameters = [
         'salutation',
         'lastName',
         'hotlineNumber',

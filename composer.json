@@ -8,18 +8,20 @@
             "email": "jan.hentschel@plusforta.de"
         }
     ],
-    "require": {},
+    "require": {
+        "webmozart/assert": "^1.5",
+        "wildbit/postmark-php": "^2.8"
+    },
     "autoload": {
         "psr-4": {
             "PlusForta\\PostmarkBundle\\": "src/"
         }
     },
     "require-dev": {
-        "wildbit/postmark-php": "^2.8",
+        "roave/security-advisories": "dev-master",
         "symfony/config": "^4.3",
         "symfony/dependency-injection": "^4.3",
         "vimeo/psalm": "^3.5",
-        "symfony/http-kernel": "^4.3",
-        "webmozart/assert": "^1.5"
+        "symfony/http-kernel": "^4.3"
     }
 }

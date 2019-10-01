@@ -102,12 +102,9 @@ class PlusFortaPostmarkClient
      */
     public function sendEmailWithTemplate($to, $templateId, $templateModel, $serverId, $from = null): void
     {
-        $this->logger->debug(sprintf('Called sendEmailWithTemplate with templateId %s.', $templateId->get()));
+        $templateIdentifier = $templateId->get();
+        $this->logger->debug(sprintf('Called sendEmailWithTemplate with templateId %s.', $templateIdentifier));
 
-        if ($this->disableDelivery) {
-            $this->logger->warning('Email Delivery is disabled!');
-            return;
-        }
 
         if (null !== $this->overrideTo) {
             /*
@@ -115,16 +112,26 @@ class PlusFortaPostmarkClient
              * can be set in config: overrides.to_email
              */
             $to = $this->overrideTo;
+            $this->logger->warning(sprintf('Overridden $to with %s', $to->toString()));
         }
 
         if (null === $from) {
             $from = $this->defaultFrom;
+            $this->logger->debug(sprintf('Used default $from with %s', $from->toString()));
         }
 
 
+
+        $this->logger->debug(json_encode($templateModel));
+        if ($this->disableDelivery) {
+            $this->logger->warning('Email Delivery is disabled!');
+            return;
+        }
+
         $apiKey = $this->servers[$serverId];
         $client = new PostmarkClient($apiKey);
-
-        $client->sendEmailWithTemplate($from->toString(), $to->toString(), $templateId->get(), $templateModel);
+        $recipient = $to->toString();
+        $client->sendEmailWithTemplate($from->toString(), $recipient, $templateIdentifier, $templateModel);
+        $this->logger->info(sprintf('Sent email wit template id "%s" to %s', $templateIdentifier, $recipient));
     }
 }
