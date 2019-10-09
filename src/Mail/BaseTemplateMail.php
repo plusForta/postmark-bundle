@@ -45,12 +45,12 @@ abstract class BaseTemplateMail implements TemplateMailInterface
     abstract function getTemplate(): array;
 
     /**
-     * @param $name
+     * @param string $name
      * @return mixed|string
      * @throws TemplateMailException
      * 
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if (!in_array($name, static::$parameters)) {
             throw new TemplateMailException(
@@ -66,11 +66,11 @@ abstract class BaseTemplateMail implements TemplateMailInterface
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      * @throws TemplateMailException
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         if (!in_array($name, static::$parameters)) {
             throw new TemplateMailException(
@@ -83,11 +83,11 @@ abstract class BaseTemplateMail implements TemplateMailInterface
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      * @throws TemplateMailException
      */
-    public function __isset($name)
+    public function __isset(string $name)
     {
         if (!in_array($name, static::$parameters, true)) {
             throw new TemplateMailException(

@@ -18,6 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('plusforta_postmark');
+        /** @psalm-suppress PossiblyUndefinedMethod */
         $treeBuilder->getRootNode()->children()
             ->arrayNode('servers')
                 ->arrayPrototype()
@@ -27,7 +28,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode('defaults')->addDefaultsIfNotSet()
                 ->children()
-                    ->arrayNode('from')
+                    ->arrayNode('from')->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('email')->defaultValue('info@plusforta.de')->end()
                             ->scalarNode('name')->defaultNull()->end()
@@ -37,7 +38,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode('overrides')->addDefaultsIfNotSet()
                 ->children()
-                    ->arrayNode('to')
+                    ->arrayNode('to')->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('email')->defaultNull()->end()
                         ->end()

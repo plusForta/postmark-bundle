@@ -4,6 +4,7 @@
 namespace PlusForta\PostmarkBundle\DependencyInjection;
 
 
+use PlusForta\PostmarkBundle\PlusFortaPostmarkClientFactory;
 use PlusForta\PostmarkBundle\Value\Email;
 use PlusForta\PostmarkBundle\Value\EmailName;
 use PlusForta\PostmarkBundle\Value\FromEmail;
@@ -25,16 +26,17 @@ class PlusFortaPostmarkExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+
         $configuration = $this->getConfiguration($configs, $container);
+        /** @psalm-suppress PossiblyNullArgument */
         $config = $this->processConfiguration($configuration, $configs);
         $definition = $container->getDefinition('PlusForta\PostmarkBundle\PlusFortaPostmarkClient');
 
-
-        $definition->setArgument(1, $this->getServers($config['servers']));
-        $definition->setArgument(2, $config['defaults']['from']['email']);
-        $definition->setArgument(3, $config['defaults']['from']['name']);
-        $definition->setArgument(4, $config['overrides']['to']['email']);
-        $definition->setArgument(5, (bool) $config['disable_delivery']);
+        $definition->setArgument(2, $this->getServers($config['servers']));
+        $definition->setArgument(3, $config['defaults']['from']['email']);
+        $definition->setArgument(4, $config['defaults']['from']['name']);
+        $definition->setArgument(5, $config['overrides']['to']['email']);
+        $definition->setArgument(6, (bool) $config['disable_delivery']);
     }
 
     /**
