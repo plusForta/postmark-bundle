@@ -11,6 +11,5 @@
         <service id="plusforta.postmark" alias="PlusForta\PostmarkBundle\PlusFortaPostmarkClient"/>
         <service public="true" id="postmark.client_factory" class="PlusForta\PostmarkBundle\PlusFortaPostmarkClientFactory"/>
         <service id="postmark.logger" class="Psr\Log\NullLogger"/>
-        <service id="logger" alias="postmark.logger" />
     </services>
 </container>
