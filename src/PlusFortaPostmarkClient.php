@@ -32,10 +32,15 @@ class PlusFortaPostmarkClient
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var PlusFortaPostmarkClientFactoryInterface
+     */
+    private $clientFactory;
 
     /**
      * PlusFortaPostmarkClient constructor.
      * @param LoggerInterface $logger
+     * @param PlusFortaPostmarkClientFactoryInterface $clientFactory
      * @param array<string, string> $servers
      * @param string $defaultFrom
      * @param string|null $defaultFromName
@@ -44,6 +49,7 @@ class PlusFortaPostmarkClient
      */
     public function __construct(
         LoggerInterface $logger,
+        PlusFortaPostmarkClientFactoryInterface $clientFactory,
         array $servers,
         string $defaultFrom,
         string $defaultFromName = null,
@@ -74,6 +80,7 @@ class PlusFortaPostmarkClient
                 $this->disableDelivery ? '' : 'not '
             )
         );
+        $this->clientFactory = $clientFactory;
     }
 
 
@@ -129,7 +136,7 @@ class PlusFortaPostmarkClient
         }
 
         $apiKey = $this->servers[$serverId];
-        $client = new PostmarkClient($apiKey);
+        $client = $this->clientFactory->createWithApiKey($apiKey);
         $recipient = $to->toString();
         $client->sendEmailWithTemplate($from->toString(), $recipient, $templateIdentifier, $templateModel);
         $this->logger->info(sprintf('Sent email wit template id "%s" to %s', $templateIdentifier, $recipient));

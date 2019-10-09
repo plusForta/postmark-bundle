@@ -5,8 +5,11 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="PlusForta\PostmarkBundle\PlusFortaPostmarkClient" public="true">
-            <argument type="service" id="logger"/>
+            <argument type="service" id="postmark.logger"/>
+            <argument type="service" id="postmark.client_factory"/>
         </service>
         <service id="plusforta.postmark" alias="PlusForta\PostmarkBundle\PlusFortaPostmarkClient"/>
+        <service public="true" id="postmark.client_factory" class="PlusForta\PostmarkBundle\PlusFortaPostmarkClientFactory"/>
+        <service id="postmark.logger" class="Psr\Log\NullLogger"/>
     </services>
 </container>
