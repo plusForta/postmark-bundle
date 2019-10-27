@@ -10,11 +10,13 @@ pipeline {
              steps {
                  sh 'composer install'
              }
-         },
-         stage('Test') {
+         }
+         stage('Psalm') {
             steps {
                 sh './vendor/bin/psalm'
-            },
+            }
+         }
+         stage('PHPUnit') {
             steps {
                 sh './vendor/bin/simple-phpunit'
             }
