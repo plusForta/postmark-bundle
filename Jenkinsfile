@@ -20,7 +20,7 @@ pipeline {
         }
         stage('PHPUnit') {
             steps {
-                sh './vendor/bin/simple-phpunit'
+                sh 'phpunit'
             }
         }
     }
