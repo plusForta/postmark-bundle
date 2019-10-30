@@ -1,25 +1,27 @@
 pipeline {
-     agent {
-         docker {
-             image 'onlineantrag-php'
-             args '-p 3005:3001'
-         }
-     }
-     stages {
-         stage('Build') {
-             steps {
-                 sh 'composer install'
-             }
-         }
-         stage('Psalm') {
+    agent {
+        docker {
+            image 'plusforta/php-ci:7.3'
+            registryUrl "https://dock.pfdev.de"
+            registryCredentialsId "cec23a25-eb2e-4331-bb78-940508d74d39"
+            reuseNode true
+        }
+    }
+    stages {
+        stage('Build') {
             steps {
-                sh './vendor/bin/psalm'
+                sh 'composer install'
             }
-         }
-         stage('PHPUnit') {
+        }
+        stage('Psalm') {
+           steps {
+               sh './vendor/bin/psalm'
+           }
+        }
+        stage('PHPUnit') {
             steps {
                 sh './vendor/bin/simple-phpunit'
             }
-         }
-     }
+        }
+    }
  }
