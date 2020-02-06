@@ -7,6 +7,7 @@ use PlusForta\PostmarkBundle\Value\Email;
 use PlusForta\PostmarkBundle\Value\EmailName;
 use PlusForta\PostmarkBundle\Value\FromEmail;
 use PlusForta\PostmarkBundle\Value\TemplateIdentifier;
+use Postmark\Models\DynamicResponseModel;
 use Postmark\PostmarkClient;
 use Psr\Log\LoggerInterface;
 
@@ -88,7 +89,7 @@ class PlusFortaPostmarkClient
      * @param TemplateMailInterface $email
      * @throws \Exception
      */
-    public function sendMail(TemplateMailInterface $email): void
+    public function sendMail(TemplateMailInterface $email): DynamicResponseModel
     {
         $this->logger->debug(sprintf('Called sendMail with email of type %s.', get_class($email)));
         $from = $email->getFrom();
@@ -96,7 +97,7 @@ class PlusFortaPostmarkClient
         $templateId = $email->getTemplateIdOrAlias();
         $templateModel = $email->getTemplate();
         $serverId = $email->getServer();
-        $this->sendEmailWithTemplate($to, $templateId, $templateModel, $serverId, $from);
+        return $this->sendEmailWithTemplate($to, $templateId, $templateModel, $serverId, $from);
     }
 
     /**
@@ -107,7 +108,13 @@ class PlusFortaPostmarkClient
      * @param FromEmail|null $from
      * @throws \Exception
      */
-    public function sendEmailWithTemplate($to, $templateId, $templateModel, $serverId, $from = null): void
+    public function sendEmailWithTemplate(
+        $to,
+        $templateId,
+        $templateModel,
+        $serverId,
+        $from = null
+    ): DynamicResponseModel
     {
         $templateIdentifier = $templateId->get();
         $this->logger->debug(sprintf('Called sendEmailWithTemplate with templateId %s.', $templateIdentifier));
@@ -138,7 +145,9 @@ class PlusFortaPostmarkClient
         $apiKey = $this->servers[$serverId];
         $client = $this->clientFactory->createWithApiKey($apiKey);
         $recipient = $to->toString();
-        $client->sendEmailWithTemplate($from->toString(), $recipient, $templateIdentifier, $templateModel);
+        $response = $client->sendEmailWithTemplate($from->toString(), $recipient, $templateIdentifier, $templateModel);
         $this->logger->info(sprintf('Sent email wit template id "%s" to %s', $templateIdentifier, $recipient));
+
+        return $response;
     }
 }
