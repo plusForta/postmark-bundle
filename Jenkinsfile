@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'plusforta/php-ci:7.3'
+            image 'plusforta/php-ci:7.4'
             registryUrl "https://dock.pfdev.de"
             registryCredentialsId "cec23a25-eb2e-4331-bb78-940508d74d39"
             reuseNode true
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('PHPUnit') {
             steps {
-                sh 'phpunit'
+                sh './vendor/bin/simple-phpunit'
             }
         }
     }
