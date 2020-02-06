@@ -89,7 +89,7 @@ class PlusFortaPostmarkClient
      * @param TemplateMailInterface $email
      * @throws \Exception
      */
-    public function sendMail(TemplateMailInterface $email): DynamicResponseModel
+    public function sendMail(TemplateMailInterface $email): ?DynamicResponseModel
     {
         $this->logger->debug(sprintf('Called sendMail with email of type %s.', get_class($email)));
         $from = $email->getFrom();
@@ -114,7 +114,7 @@ class PlusFortaPostmarkClient
         $templateModel,
         $serverId,
         $from = null
-    ): DynamicResponseModel
+    ): ?DynamicResponseModel
     {
         $templateIdentifier = $templateId->get();
         $this->logger->debug(sprintf('Called sendEmailWithTemplate with templateId %s.', $templateIdentifier));
@@ -139,7 +139,7 @@ class PlusFortaPostmarkClient
         $this->logger->debug(\json_encode($templateModel));
         if ($this->disableDelivery) {
             $this->logger->warning('Email Delivery is disabled!');
-            return;
+            return null;
         }
 
         $apiKey = $this->servers[$serverId];
