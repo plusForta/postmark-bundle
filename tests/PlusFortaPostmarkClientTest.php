@@ -10,7 +10,7 @@ use PlusForta\PostmarkBundle\Value\FromEmail;
 use Postmark\PostmarkClient;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PlusFortaPostmarClientTest extends TestCase
+class PlusFortaPostmarkClientTest extends TestCase
 {
 
     /**
