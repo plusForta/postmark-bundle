@@ -56,8 +56,7 @@ class PlusFortaPostmarkClient
         string $defaultFromName = null,
         string $overrideTo = null,
         bool $disableDelivery = false
-    )
-    {
+    ) {
         $this->servers = $servers;
 
         if ($defaultFromName) {
@@ -89,7 +88,7 @@ class PlusFortaPostmarkClient
      * @param TemplateMailInterface $email
      * @throws \Exception
      */
-    public function sendMail(TemplateMailInterface $email): ?DynamicResponseModel
+    public function sendMail(TemplateMailInterface $email): DynamicResponseModel
     {
         $this->logger->debug(sprintf('Called sendMail with email of type %s.', get_class($email)));
         $from = $email->getFrom();
@@ -114,8 +113,7 @@ class PlusFortaPostmarkClient
         $templateModel,
         $serverId,
         $from = null
-    ): ?DynamicResponseModel
-    {
+    ): DynamicResponseModel {
         $templateIdentifier = $templateId->get();
         $this->logger->debug(sprintf('Called sendEmailWithTemplate with templateId %s.', $templateIdentifier));
 
@@ -135,11 +133,10 @@ class PlusFortaPostmarkClient
         }
 
 
-
         $this->logger->debug(\json_encode($templateModel));
         if ($this->disableDelivery) {
             $this->logger->warning('Email Delivery is disabled!');
-            return null;
+            return new DynamicResponseModel(['errorcode' => 0, 'message' => 'Email Delivery is disabled!']);
         }
 
         $apiKey = $this->servers[$serverId];
@@ -149,5 +146,37 @@ class PlusFortaPostmarkClient
         $this->logger->info(sprintf('Sent email wit template id "%s" to %s', $templateIdentifier, $recipient));
 
         return $response;
+    }
+
+
+    public function getBounces(
+        string $serverId,
+        int $count = 100,
+        int $offset = 0,
+        ?\DateTimeImmutable $fromDate = null,
+        ?\DateTimeImmutable $toDate = null
+    ): DynamicResponseModel {
+        $type = null;
+        $inactive = null;
+        $emailFilter = null;
+        $tag = null;
+        $messageID = null;
+
+        $apiKey = $this->servers[$serverId];
+        $client = $this->clientFactory->createWithApiKey($apiKey);
+        $fromdate = ($fromDate instanceof \DateTimeImmutable) ? $fromDate->format('Y-m-d') : null;
+        $todate = ($toDate instanceof \DateTimeImmutable) ? $toDate->format('Y-m-d') : null;
+
+        return $client->getBounces(
+            $count,
+            $offset,
+            $type,
+            $inactive,
+            $emailFilter,
+            $tag,
+            $messageID,
+            $fromdate,
+            $todate
+        );
     }
 }
