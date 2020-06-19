@@ -143,7 +143,7 @@ class PlusFortaPostmarkClient
         $client = $this->clientFactory->createWithApiKey($apiKey);
         $recipient = $to->toString();
         $response = $client->sendEmailWithTemplate($from->toString(), $recipient, $templateIdentifier, $templateModel);
-        $this->logger->info(sprintf('Sent email wit template id "%s" to %s', $templateIdentifier, $recipient));
+        $this->logger->info(sprintf('Sent email with template id "%s" to %s', $templateIdentifier, $recipient));
 
         return $response;
     }
