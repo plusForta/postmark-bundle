@@ -148,6 +148,46 @@ class PlusFortaPostmarkClient
         return $response;
     }
 
+    public function sendEmail(
+        $to,
+        $subject,
+        $html,
+        $text,
+        $serverId,
+        $from = null
+    ): DynamicResponseModel {
+        $this->logger->debug(sprintf('Called sendEmail with subject: "%s".', $subject));
+
+
+        if (null !== $this->overrideTo) {
+            /*
+             * Overrides recipient (useful for test or dev environment)
+             * can be set in config: overrides.to_email
+             */
+            $to = $this->overrideTo;
+            $this->logger->warning(sprintf('Overridden $to with %s', $to->toString()));
+        }
+
+        if (null === $from) {
+            $from = $this->defaultFrom;
+            $this->logger->debug(sprintf('Used default $from with %s', $from->toString()));
+        }
+
+
+        if ($this->disableDelivery) {
+            $this->logger->warning('Email Delivery is disabled!');
+            return new DynamicResponseModel(['errorcode' => 0, 'message' => 'Email Delivery is disabled!']);
+        }
+
+        $apiKey = $this->servers[$serverId];
+        $client = $this->clientFactory->createWithApiKey($apiKey);
+        $recipient = $to->toString();
+        $response = $client->sendEmail($from->toString(), $recipient, $subject, $html, $text);
+        $this->logger->info(sprintf('Sent email to %s', $recipient));
+
+        return $response;
+    }
+
 
     public function getBounces(
         string $serverId,
