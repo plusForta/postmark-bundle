@@ -4,6 +4,18 @@ Das plusforta/postmark-bundle ist ein Bundle für das Symfony Framework zum Vers
 
 ## Installation
 
+Zuerst muss das github-Repository zur composer.json hinzugefügt werden. 
+
+**composer.json**
+````json
+"repositories": [
+    ...
+    {
+      "type": "git",
+      "url": "https://github.com/plusForta/postmark-bundle.git"
+    }
+  ],
+````
 ```composer requrie plusforta/postmark-bundle```
 
 ## Konfiguration
