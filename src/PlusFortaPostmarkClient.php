@@ -2,63 +2,26 @@
 
 namespace PlusForta\PostmarkBundle;
 
+use DateTimeImmutable;
 use PlusForta\PostmarkBundle\Mail\TemplateMailInterface;
 use PlusForta\PostmarkBundle\Value\Email;
 use PlusForta\PostmarkBundle\Value\EmailName;
 use PlusForta\PostmarkBundle\Value\FromEmail;
 use PlusForta\PostmarkBundle\Value\TemplateIdentifier;
 use Postmark\Models\DynamicResponseModel;
-use Postmark\PostmarkClient;
 use Psr\Log\LoggerInterface;
 
 class PlusFortaPostmarkClient
 {
-    /**
-     * @var ?Email
-     */
-    private $overrideTo;
-    /**
-     * @var FromEmail
-     */
-    private $defaultFrom;
-    /**
-     * @var array<string, string>
-     */
-    private $servers;
-    /**
-     * @var bool
-     */
-    private $disableDelivery;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var PlusFortaPostmarkClientFactoryInterface
-     */
-    private $clientFactory;
-
-    /**
-     * PlusFortaPostmarkClient constructor.
-     * @param LoggerInterface $logger
-     * @param PlusFortaPostmarkClientFactoryInterface $clientFactory
-     * @param array<string, string> $servers
-     * @param string $defaultFrom
-     * @param string|null $defaultFromName
-     * @param string $overrideTo
-     * @param bool $disableDelivery
-     */
     public function __construct(
-        LoggerInterface $logger,
-        PlusFortaPostmarkClientFactoryInterface $clientFactory,
-        array $servers,
-        string $defaultFrom,
-        string $defaultFromName = null,
-        string $overrideTo = null,
-        bool $disableDelivery = false
+        private LoggerInterface $logger,
+        private PlusFortaPostmarkClientFactoryInterface $clientFactory,
+        private array $servers,
+        private string|FromEmail $defaultFrom,
+        private ?string $defaultFromName = null,
+        private Email|string|null $overrideTo = null,
+        private bool $disableDelivery = false
     ) {
-        $this->servers = $servers;
-
         if ($defaultFromName) {
             $emailName = EmailName::fromString($defaultFromName);
             $email = Email::fromString($defaultFrom);
@@ -66,10 +29,9 @@ class PlusFortaPostmarkClient
         } else {
             $from = FromEmail::fromString($defaultFrom);
         }
+
         $this->defaultFrom = $from;
         $this->overrideTo = $overrideTo ? Email::fromString($overrideTo) : null;
-        $this->disableDelivery = $disableDelivery;
-        $this->logger = $logger;
 
         $logger->debug(
             sprintf(
@@ -80,12 +42,10 @@ class PlusFortaPostmarkClient
                 $this->disableDelivery ? '' : 'not '
             )
         );
-        $this->clientFactory = $clientFactory;
     }
 
 
     /**
-     * @param TemplateMailInterface $email
      * @throws \Exception
      */
     public function sendMail(TemplateMailInterface $email): DynamicResponseModel
@@ -96,23 +56,19 @@ class PlusFortaPostmarkClient
         $templateId = $email->getTemplateIdOrAlias();
         $templateModel = $email->getTemplate();
         $serverId = $email->getServer();
+
         return $this->sendEmailWithTemplate($to, $templateId, $templateModel, $serverId, $from);
     }
 
     /**
-     * @param Email $to
-     * @param TemplateIdentifier $templateId
-     * @param array $templateModel
-     * @param string $serverId
-     * @param FromEmail|null $from
      * @throws \Exception
      */
     public function sendEmailWithTemplate(
-        $to,
-        $templateId,
-        $templateModel,
-        $serverId,
-        $from = null
+        Email              $to,
+        TemplateIdentifier $templateId,
+        array              $templateModel,
+        string             $serverId,
+        FromEmail $from = null
     ): DynamicResponseModel {
         $templateIdentifier = $templateId->get();
         $this->logger->debug(sprintf('Called sendEmailWithTemplate with templateId %s.', $templateIdentifier));
@@ -149,12 +105,12 @@ class PlusFortaPostmarkClient
     }
 
     public function sendEmail(
-        $to,
-        $subject,
-        $html,
-        $text,
-        $serverId,
-        $from = null
+        Email $to,
+        string $subject,
+        string $html,
+        string $text,
+        string $serverId,
+        ?FromEmail $from = null
     ): DynamicResponseModel {
         $this->logger->debug(sprintf('Called sendEmail with subject: "%s".', $subject));
 
@@ -188,35 +144,26 @@ class PlusFortaPostmarkClient
         return $response;
     }
 
-
     public function getBounces(
-        string $serverId,
-        int $count = 100,
-        int $offset = 0,
-        ?\DateTimeImmutable $fromDate = null,
-        ?\DateTimeImmutable $toDate = null
+        string             $serverId,
+        int                $count = 100,
+        int                $offset = 0,
+        ?DateTimeImmutable $fromDate = null,
+        ?DateTimeImmutable $toDate = null
     ): DynamicResponseModel {
-        $type = null;
-        $inactive = null;
-        $emailFilter = null;
-        $tag = null;
-        $messageID = null;
-
         $apiKey = $this->servers[$serverId];
         $client = $this->clientFactory->createWithApiKey($apiKey);
-        $fromdate = ($fromDate instanceof \DateTimeImmutable) ? $fromDate->format('Y-m-d') : null;
-        $todate = ($toDate instanceof \DateTimeImmutable) ? $toDate->format('Y-m-d') : null;
 
         return $client->getBounces(
             $count,
             $offset,
-            $type,
-            $inactive,
-            $emailFilter,
-            $tag,
-            $messageID,
-            $fromdate,
-            $todate
+            null,
+            null,
+            null,
+            null,
+            null,
+            ($fromDate instanceof DateTimeImmutable) ? $fromDate->format('Y-m-d') : null,
+            ($toDate instanceof DateTimeImmutable) ? $toDate->format('Y-m-d') : null
         );
     }
 }
