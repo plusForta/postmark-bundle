@@ -66,11 +66,9 @@ abstract class BaseTemplateMail implements TemplateMailInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
      * @throws TemplateMailException
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, mixed $value)
     {
         if (!in_array($name, static::$parameters)) {
             throw new TemplateMailException(
@@ -83,11 +81,9 @@ abstract class BaseTemplateMail implements TemplateMailInterface
     }
 
     /**
-     * @param string $name
-     * @return bool
      * @throws TemplateMailException
      */
-    public function __isset(string $name)
+    public function __isset(string $name): bool
     {
         if (!in_array($name, static::$parameters, true)) {
             throw new TemplateMailException(
@@ -99,9 +95,6 @@ abstract class BaseTemplateMail implements TemplateMailInterface
         return isset($this->values[$name]);
     }
 
-    /**
-     * @param FromEmail $from
-     */
     public function from(FromEmail $from): void
     {
         $this->from = $from;
@@ -112,7 +105,7 @@ abstract class BaseTemplateMail implements TemplateMailInterface
         return $this->from;
     }
 
-    public function to(string $to)
+    public function to(string $to): void
     {
         $this->to = Email::fromString($to);
     }
