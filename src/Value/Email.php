@@ -14,9 +14,6 @@ class Email
 
     public static function fromString(string $email): Email
     {
-        Assert::email($email);
-        Assert::notNull($email);
-
         return new static($email);
     }
 
