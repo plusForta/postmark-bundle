@@ -68,7 +68,7 @@ abstract class BaseTemplateMail implements TemplateMailInterface
     /**
      * @throws TemplateMailException
      */
-    public function __set(string $name, mixed $value)
+    public function __set(string $name, $value)
     {
         if (!in_array($name, static::$parameters)) {
             throw new TemplateMailException(

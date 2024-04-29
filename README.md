@@ -14,8 +14,7 @@ Right now this bundle is only used by the onlineantrag-php (ERP) project.  It is
 |---------|:---------------:|--------|
 | 1.0     |       5.4       | none   |
 | 1.1     |       5.4       | none   |
-| 1.2     |       6.3       | 1.2.x  |
-| 1.3     |       6.3       | master |
+| 1.2     |       6.3       | master |
 
 ## Configuration
 
