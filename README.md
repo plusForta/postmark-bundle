@@ -1,26 +1,14 @@
 # PlusForta PostmarkBundle
 
-Das plusforta/postmark-bundle ist ein Bundle für das Symfony Framework zum Versenden von Template Mails über PostmarkApp 
+The plusforta/postmark-bundle is a bundle for the Symfony framework for sending template mails via PostmarkApp
 
 ## Installation
 
-Zuerst muss das github-Repository zur composer.json hinzugefügt werden. 
-
-**composer.json**
-````json
-"repositories": [
-    ...
-    {
-      "type": "git",
-      "url": "https://github.com/plusForta/postmark-bundle.git"
-    }
-  ],
-````
 ```composer requrie plusforta/postmark-bundle```
 
-## Konfiguration
+## Configuration
 
-Die Konfiguration kann eine config/packages/plusforta_postmark.yaml angelegt werden mit folgender Struktur:
+The configuration can be created in `config/packages/plusforta_postmark.yaml` with the following structure:
 
 ```
 plusforta_postmark:
@@ -38,38 +26,38 @@ plusforta_postmark:
 
 ```
 
-Unter dev, prod und test können spezifische Konfigurationen für die Environments abgelegt werden.
+Specific configurations for the environments can be stored under dev, prod and test.
 
-### Pflichtangaben:
+### Mandatory configuration information:
 
-Angegeben werden muss die Konfiguration der Server:
+The server configuration must be specified:
 `plusforta_postmark.servers`.
-Der Wert entspricht dem Namen des Servers, sowie dessen API Key. 
+The value corresponds to the name of the server and its API key.
 
 ### Optional:
 
 #### defaults
 
-Es ist möglich einen Default Wert für den Absender anzulegen (`plusforta_postmark.defaults.email` bzw. `plusforta_postmark.defaults.name`).
+It is possible to create a default value for the sender (`plusforta_postmark.defaults.email` or `plusforta_postmark.defaults.name`).
 
 #### overrides
 
-Es ist möglich den Empfänger permanent zu überschreiben (`plusforta_postmark.overrides.to.email`). Das ist sinnvoll für 
-dev und staging Umgebung.
+It is possible to permanently overwrite the recipient (`plusforta_postmark.overrides.to.email`). This is useful for
+dev and staging environment.
 
-#### diable delivery 
+#### disable delivery 
 
-Es ist möglich den Emailversand zu deaktiveren (`plusforta_postmark.disable_delivery`), dadurch werden keine Emails 
-versendet und es findet auch keine Kommunikation mit dem Postmark Server statt. Das ist Sinnvoll für die Testumgebung.    
+It is possible to deactivate email delivery (`plusforta_postmark.disable_delivery`), which means that no emails are sent and no communication
+and there is no communication with the Postmark server. This is useful for the test environment.
 
 
-## Neue Email anlegen
+## Create new email template
 
-Ein Beispiel für ein Mail Template ist `src/Mail/KFKundenanfrageTemplateMail.php`
+An example of a mail template is `src/Mail/KFKundenanfrageTemplateMail.php`.
 
-1. Email erbt von `PlusForta\PostmarkBundle\Mail\BaseTemplateMail`
-2. `SERVER_ID` muss angegeben werden. Dieser Server muss in der Konfiguration hinterlegt sein (`plusforta_postmark.servers`). 
-3. `TEMPLATE_ID` oder `TEMPLATE_ALIAS` muss gesetzt sein. Die `TEMPLATE_ID` entspricht der ID bzw. dem ALIAS des Templates bei Postmark.
-4. `$parameters` ist ein Array mit Parametern, die für das Template gesetzt werden können.
-5. `getTemplate()` muss implementiert werden. Der Rückgabewert ist ein assoziatives Array. Ein json_encode auf das Array 
-muss dem benötigte JSON für das Template bei Postmark entsprechen. 
+1. email inherits from `PlusForta\PostmarkBundle\Mail\BaseTemplateMail`.
+2. `SERVER_ID` must be specified. This server must be stored in the configuration (`plusforta_postmark.servers`).
+3. `TEMPLATE_ID` or `TEMPLATE_ALIAS` must be set. The `TEMPLATE_ID` corresponds to the ID or ALIAS of the template in Postmark.
+4. `$parameters` is an array with parameters that can be set for the template.
+5. `getTemplate()` must be implemented. The return value is an associative array. A json_encode on the array
+   must correspond to the required JSON for the template at Postmark. 

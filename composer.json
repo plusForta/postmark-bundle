@@ -2,10 +2,19 @@
     "name": "plusforta/postmark-bundle",
     "description": "This bundle enables postmark template emails for symfony",
     "type": "symfony-bundle",
+    "license": "MIT",
     "authors": [
+        {
+            "name": "Anar Haqverdiyev@plusforta.de",
+            "email": "anar.haqverdiyev@plusforta.de"
+        },
         {
             "name": "Jan Hentschel",
             "email": "jan.hentschel@plusforta.de"
+        },
+        {
+            "name": "Marc Runkel",
+            "email": "marc.runkel@plusforta.de"
         }
     ],
     "require": {
